@@ -1,0 +1,29 @@
+name: Sync Docker Image Workflow
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download upstream workflow file
+        run: |
+          curl -o .github/workflows/docker-image.yml https://raw.githubusercontent.com/senshinya/MoonTV/main/.github/workflows/docker-image.yml
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          if git diff --quiet; then
+            echo "No changes."
+          else
+            git add .github/workflows/docker-image.yml
+            git commit -m "Sync upstream docker-image.yml"
+            git push
+          fi
