@@ -1,1 +1,29 @@
+name: Sync config.json from upstream
 
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 每天凌晨2点同步
+  workflow_dispatch:      # 也可以手动运行
+
+jobs:
+  sync-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download upstream config.json
+        run: |
+          curl -L -o config.json https://raw.githubusercontent.com/senshinya/MoonTV/main/config.json
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add config.json
+            git commit -m "Sync upstream config.json"
+            git push
+          fi
