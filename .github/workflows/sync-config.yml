@@ -14,7 +14,7 @@ jobs:
 
       - name: Download upstream config.json
         run: |
-          curl -L -o config.json https://github.com/LunaTechLab/MoonTV/blob/main/config.json
+          curl -L -o config.json https://raw.githubusercontent.com/LunaTechLab/MoonTV/refs/heads/main/config.json
 
       - name: Commit and push if changed
         run: |
