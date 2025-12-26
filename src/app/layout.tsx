@@ -65,7 +65,10 @@ export default async function RootLayout({
     const config = await getConfig();
     siteName = config.SiteConfig.SiteName;
     announcement = config.SiteConfig.Announcement;
-    enableRegister = config.UserConfig.AllowRegister;
+    enableRegister =
+      envTrue(process.env.ENABLE_REGISTER) ||
+      envTrue(process.env.NEXT_PUBLIC_ENABLE_REGISTER) ||
+  config.UserConfig.AllowRegister === true;
     doubanProxyType = config.SiteConfig.DoubanProxyType;
     doubanProxy = config.SiteConfig.DoubanProxy;
     doubanImageProxyType = config.SiteConfig.DoubanImageProxyType;
