@@ -80,12 +80,13 @@ function LoginPageClient() {
 
   // 在客户端挂载后设置配置
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storageType = (window as any).RUNTIME_CONFIG?.STORAGE_TYPE;
-      setShouldAskUsername(storageType && storageType !== 'localstorage');
-      setEnableRegister(
-        Boolean((window as any).RUNTIME_CONFIG?.ENABLE_REGISTER)
-      );
+  if (typeof window !== 'undefined') {
+    const rc = (window as any).RUNTIME_CONFIG || {};
+    const storageType = rc.STORAGE_TYPE;
+    setShouldAskUsername(storageType && storageType !== 'localstorage');
+
+    const v = rc.ENABLE_REGISTER ?? rc.NEXT_PUBLIC_ENABLE_REGISTER;
+    setEnableRegister(v === true || v === 'true' || v === 1 || v === '1');
     }
   }, []);
 
